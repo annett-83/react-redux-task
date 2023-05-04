@@ -14,6 +14,6 @@ export function titleChange(id) {
 export function taskDelete(id) {
   return {
     type: actionsTypes.taskDeleted,
-    payload: { id, title: `Task was deleted ${id}` },
+    payload:{id},
   };
-} 
+}

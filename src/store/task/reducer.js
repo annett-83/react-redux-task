@@ -1,5 +1,5 @@
 import { taskUpdated } from "./actionTypes";
-import { taskCompleted } from "./actionTypes"; 
+import { taskCompleted } from "./actionTypes";
 import { taskDeleted } from "./actionTypes";
 
 export function taskReducer(state = [], action) {
@@ -12,12 +12,7 @@ export function taskReducer(state = [], action) {
       newArray[elementIndex].completed = true;
       return newArray;
     case taskDeleted: {
-      const newArray = [...state];
-      const elementIndex = newArray.findIndex(
-        (el) => el.id === action.payload.id
-      );
-      newArray[elementIndex] = { ...newArray[elementIndex], ...action.payload };
-      return newArray;
+      return state.filter((el) => el.id !== action.payload.id)
     }
     case taskUpdated: {
       const newArray = [...state];
