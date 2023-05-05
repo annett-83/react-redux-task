@@ -1,32 +1,20 @@
-import {
-  legacy_createStore as createStore
-} from "@reduxjs/toolkit";
-import taskReducer from "./task";
-function configureStore(){
-  return createStore(
-    taskReducer,
-    window._REDUX_DEVTOOLS_EXTENSION_ && window._REDUX_DEVTOOLS_EXTENSION_()
-  );
-}
-export default configureStore;
-/* import {applyMiddleware} from "redux";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import errorReducer from "./errors";
 import { logger } from "./middleware/logger";
+import taskReducer from "./task";
 
-import { thunk } from "./middleware/thunk";
+const rootReducer = combineReducers({
+    errors: errorReducer,
+    tasks: taskReducer,
+});
 
-const middlewareEnhancer = applyMiddleware(logger, thunk);
-
-function configureStore() {
-  return createStore(
-    taskReducer,
-    compose(
-      middlewareEnhancer,
-      window._REDUX_DEVTOOLS_EXTENSION_ && window._REDUX_DEVTOOLS_EXTENSION_()
-    )
-  );
+function createStore() {
+    return configureStore({
+        reducer: rootReducer,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(logger),
+        devTools: process.env.NODE_ENV !== "production",
+    });
 }
-export default configureStore;
- */
 
-
-
+export default createStore;
