@@ -1,6 +1,7 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import todosService from "../services/todos.service";
 import { setError } from "./errors";
+import { random } from "lodash";
 const initialState = { entities: [], isLoading: true };
 
 const taskSlice = createSlice({
@@ -25,6 +26,11 @@ const taskSlice = createSlice({
                 (el) => el.id !== action.payload.id
             );
         },
+        add(state, action) {
+            action.payload["id"] = Math.floor(random(10000));
+            state.entities.push(action.payload);
+        },
+
         taskRequested(state) {
             state.isLoading = true;
         },
@@ -34,7 +40,7 @@ const taskSlice = createSlice({
     },
 });
 const { actions, reducer: taskReducer } = taskSlice;
-const { update, remove, recived, taskRequested, taskRequestFailed } = actions;
+const { update, remove, recived, taskRequested, taskRequestFailed, add } = actions;
 
 export const loadTasks = () => async (dispatch) => {
     dispatch(taskRequested());
@@ -56,6 +62,9 @@ export function titleChanged(id) {
 }
 export function taskDeleted(id) {
     return remove({ id });
+}
+export function taskCreated(taskData) {
+    return add(taskData);
 }
 
 export const getTasks = () => (state) => state.tasks.entities;
